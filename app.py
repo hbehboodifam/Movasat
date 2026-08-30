@@ -257,11 +257,10 @@ def export_excel():
     return send_file(output, as_attachment=True, download_name='گزارش_کمک‌ها.xlsx')
 
 # ========================= اجرا =========================
+with app.app_context():
+    db.create_all()
+    print("✅ جداول دیتابیس با موفقیت ساخته شدند.")
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-    
-#if __name__ == '__main__':
- #   with app.app_context():
-  #      db.create_all()
-   # app.run(debug=True, host='0.0.0.0', port=5000)
