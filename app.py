@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this'
 
 # ========================= تنظیمات اتصال به MySQL =========================
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:13681370Hb%40@127.0.0.1:3306/charity_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///charity.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # =======================================================================
 
