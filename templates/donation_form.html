@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ action }} واریزی</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background: #f1f5f9;
+            padding: 16px;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 550px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        h1 {
+            font-weight: 800;
+            font-size: 22px;
+            color: #1a2940;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        h1 span {
+            color: #d4af37;
+        }
+        label {
+            display: block;
+            margin-top: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            box-sizing: border-box;
+            margin-top: 6px;
+            background: #f8fafc;
+            transition: all 0.15s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #d4af37;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+        input[type="file"] {
+            padding: 12px;
+            font-size: 14px;
+        }
+        .item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .item-row select {
+            flex: 1 1 30%;
+            min-width: 0;
+        }
+        .item-row input[type="number"] {
+            flex: 1 1 30%;
+            min-width: 0;
+        }
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            transition: 0.15s ease;
+            flex: 0 0 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #1a2940;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            font-family: 'Vazirmatn', sans-serif;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(26, 41, 64, 0.15);
+        }
+        .btn:hover {
+            background: #0f1a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 41, 64, 0.2);
+        }
+        .btn-secondary {
+            background: #d4af37;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            box-shadow: none;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover {
+            background: #c09e2e;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.15s ease;
+        }
+        .back-link:hover {
+            color: #1a2940;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .alert-success {
+            background: #ecfdf5;
+            color: #0d9488;
+            border-right: 4px solid #0d9488;
+        }
+        .alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-right: 4px solid #dc2626;
+        }
+        .file-info {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .file-info a {
+            color: #0d9488;
+            text-decoration: none;
+        }
+        .file-info a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 16px; border-radius: 18px; }
+            h1 { font-size: 19px; }
+            input, select { font-size: 14px; padding: 10px 12px; }
+            .btn { font-size: 15px; padding: 12px; }
+            .item-row {
+                flex-direction: column;
+                gap: 8px;
+                background: #f8fafc;
+                padding: 12px;
+                border-radius: 14px;
+                border: 1px solid #e2e8f0;
+                margin-bottom: 12px;
+            }
+            .item-row select,
+            .item-row input[type="number"] {
+                flex: 1 1 100%;
+                width: 100%;
+                min-width: unset;
+            }
+            .item-row .btn-danger {
+                flex: 0 0 40px;
+                height: 40px;
+                width: 40px;
+                align-self: flex-end;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ action }} <span>واریزی</span></h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data">
+            <label>نام و نام خانوادگی</label>
+            <input type="text" name="name" value="{{ donation.donator_name if donation else '' }}" placeholder="مثال: علی محمدی">
+
+            <label>جزئیات واریزی (حداقل یک ردیف)</label>
+            <div id="items-container">
+                {% if donation and donation.items %}
+                    {% for item in donation.items %}
+                    <div class="item-row">
+                        <select name="category[]">
+                            <option value="">گزینه ثابت...</option>
+                            <option value="صدقه" {% if item.category == 'صدقه' %}selected{% endif %}>صدقه</option>
+                            <option value="خیرات" {% if item.category == 'خیرات' %}selected{% endif %}>خیرات</option>
+                            <option value="زکات" {% if item.category == 'زکات' %}selected{% endif %}>زکات</option>
+                            <option value="نذر" {% if item.category == 'نذر' %}selected{% endif %}>نذر</option>
+                            <option value="کمک عمومی" {% if item.category == 'کمک عمومی' %}selected{% endif %}>کمک عمومی</option>
+                        </select>
+                        <select name="campaign_id[]">
+                            <option value="">کمپین ویژه...</option>
+                            {% for camp in campaigns %}
+                                <option value="{{ camp.id }}" {% if item.campaign_id == camp.id %}selected{% endif %}>{{ camp.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="amount[]" value="{{ item.amount }}" placeholder="مبلغ" required>
+                        <button type="button" class="btn-danger" onclick="removeRow(this)">✖</button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="item-row">
+                        <select name="category[]">
+                            <option value="">گزینه ثابت...</option>
+                            <option value="صدقه">صدقه</option>
+                            <option value="خیرات">خیرات</option>
+                            <option value="زکات">زکات</option>
+                            <option value="نذر">نذر</option>
+                            <option value="کمک عمومی">کمک عمومی</option>
+                        </select>
+                        <select name="campaign_id[]">
+                            <option value="">کمپین ویژه...</option>
+                            {% for camp in campaigns %}
+                                <option value="{{ camp.id }}">{{ camp.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="amount[]" placeholder="مبلغ" required>
+                        <button type="button" class="btn-danger" onclick="removeRow(this)">✖</button>
+                    </div>
+                {% endif %}
+            </div>
+            <button type="button" id="add-row-btn" class="btn btn-secondary">➕ افزودن ردیف</button>
+
+            <label>وضعیت</label>
+            <select name="status">
+                <option value="approved" {% if donation and donation.status == 'approved' %}selected{% endif %}>تأییدشده</option>
+                <option value="pending" {% if donation and donation.status == 'pending' %}selected{% endif %}>در انتظار تأیید</option>
+                <option value="rejected" {% if donation and donation.status == 'rejected' %}selected{% endif %}>رد شده</option>
+            </select>
+
+            <label>تصویر فیش (اختیاری)</label>
+            <input type="file" name="receipt" accept="image/*">
+            {% if donation and donation.receipt_image %}
+                <div class="file-info">فیش قبلی: <a href="/static/uploads/{{ donation.receipt_image }}" target="_blank">مشاهده</a></div>
+            {% endif %}
+
+            <button type="submit" class="btn">💾 ذخیره</button>
+        </form>
+
+        <a href="{{ url_for('dashboard') }}" class="back-link">← بازگشت به داشبورد</a>
+    </div>
+
+    <script>
+        document.getElementById('add-row-btn').addEventListener('click', function() {
+            const container = document.getElementById('items-container');
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <select name="category[]">
+                    <option value="">گزینه ثابت...</option>
+                    <option value="صدقه">صدقه</option>
+                    <option value="خیرات">خیرات</option>
+                    <option value="زکات">زکات</option>
+                    <option value="نذر">نذر</option>
+                    <option value="کمک عمومی">کمک عمومی</option>
+                </select>
+                <select name="campaign_id[]">
+                    <option value="">کمپین ویژه...</option>
+                    {% for camp in campaigns %}
+                        <option value="{{ camp.id }}">{{ camp.title }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="amount[]" placeholder="مبلغ" required>
+                <button type="button" class="btn-danger" onclick="removeRow(this)">✖</button>
+            `;
+            container.appendChild(row);
+        });
+
+        function removeRow(btn) {
+            const row = btn.parentElement;
+            if (document.querySelectorAll('.item-row').length > 1) {
+                row.remove();
+            } else {
+                alert('حداقل یک ردیف باید وجود داشته باشد.');
+            }
+        }
+    </script>
+</body>
+</html>

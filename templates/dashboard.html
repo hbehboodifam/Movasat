@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>داشبورد مدیریت</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* همان استایل‌های قبلی با اضافه کردن استایل فیلتر تاریخ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background: #f1f5f9;
+            padding: 16px;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+        }
+        h1 {
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            color: #1a2940;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        h1 span {
+            color: #d4af37;
+        }
+        h2 {
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a2940;
+            margin: 20px 0 12px 0;
+        }
+        
+        /* ===== فیلتر تاریخ ===== */
+        .filter-box {
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            margin: 16px 0;
+            border: 1px solid #e2e8f0;
+        }
+        .filter-box .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .filter-box .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .filter-box .field input {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 14px;
+            background: white;
+            min-width: 140px;
+            transition: 0.15s ease;
+        }
+        .filter-box .field input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        .filter-box .btn-filter {
+            padding: 8px 20px;
+            background: #1a2940;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.15s ease;
+        }
+        .filter-box .btn-filter:hover {
+            background: #0f1a2b;
+        }
+        .filter-box .btn-reset {
+            padding: 8px 16px;
+            background: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.15s ease;
+            text-decoration: none;
+        }
+        .filter-box .btn-reset:hover {
+            background: #cbd5e1;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .alert-success {
+            background: #ecfdf5;
+            color: #0d9488;
+            border-right: 4px solid #0d9488;
+        }
+        .alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-right: 4px solid #dc2626;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin: 16px 0 20px 0;
+        }
+        .stat-box {
+            background: #f8fafc;
+            padding: 16px 18px;
+            border-radius: 16px;
+            text-align: center;
+            border-bottom: 3px solid #d4af37;
+            transition: transform 0.15s ease;
+        }
+        .stat-box:hover {
+            transform: translateY(-2px);
+        }
+        .stat-box span {
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            display: block;
+            color: #1a2940;
+            line-height: 1.3;
+        }
+        .stat-box .label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+        .stat-box .pending-color {
+            color: #f59e0b;
+        }
+        .balance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 12px 0 20px 0;
+        }
+        .balance-item {
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-right: 3px solid #d4af37;
+        }
+        .balance-item .cat {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .balance-item .amt {
+            font-weight: 700;
+            color: #0d9488;
+            font-size: 15px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+        .btn-success { background: #0d9488; }
+        .btn-success:hover { background: #0f766e; }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-warning { background: #f59e0b; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-primary { background: #1a2940; }
+        .btn-primary:hover { background: #0f1a2b; }
+        .btn-purple { background: #7c3aed; }
+        .btn-purple:hover { background: #6d28d9; }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 16px 0 20px 0;
+        }
+        .actions .btn {
+            flex: 1 1 auto;
+            min-width: 140px;
+            justify-content: center;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 16px 0 12px 0;
+        }
+        .toolbar .count {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 12px 0;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 700px;
+        }
+        th {
+            background: #1a2940;
+            color: white;
+            padding: 14px 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: 400;
+        }
+        tr:hover td {
+            background: #f8fafc;
+        }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .badge-donation { background: #0d9488; color: white; }
+        .badge-expense { background: #dc2626; color: white; }
+        .badge-pending { background: #f59e0b; color: white; }
+        .badge-approved { background: #0d9488; color: white; }
+        .badge-rejected { background: #dc2626; color: white; }
+        .badge-registered { background: #1a2940; color: white; }
+        .text-green { color: #0d9488; font-weight: 700; }
+        .text-red { color: #dc2626; font-weight: 700; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 20px 0 10px 0;
+        }
+        .pagination a, .pagination span {
+            padding: 8px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #1a2940;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.15s ease;
+        }
+        .pagination a:hover {
+            background: #1a2940;
+            color: white;
+            border-color: #1a2940;
+        }
+        .pagination .active {
+            background: #1a2940;
+            color: white;
+            border-color: #1a2940;
+        }
+        .empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+        .action-group {
+            display: inline-flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .action-group .btn {
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 8px;
+            min-width: 32px;
+            justify-content: center;
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 16px; border-radius: 16px; }
+            h1 { font-size: 22px; }
+            h2 { font-size: 16px; }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .stat-box { padding: 12px 10px; }
+            .stat-box span { font-size: 20px; }
+            .stat-box .label { font-size: 11px; }
+            .balance-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .balance-item { font-size: 12px; padding: 8px 12px; }
+            .balance-item .amt { font-size: 13px; }
+            .actions .btn {
+                flex: 1 1 100%;
+                min-width: unset;
+                padding: 12px;
+                font-size: 14px;
+                justify-content: center;
+            }
+            .filter-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-box .field input {
+                min-width: unset;
+                width: 100%;
+            }
+            .table-wrapper {
+                border: none;
+                border-radius: 0;
+                overflow-x: visible;
+            }
+            table {
+                min-width: unset;
+                display: block;
+            }
+            thead { display: none; }
+            tbody, tr, td { display: block; width: 100%; }
+            tr {
+                background: #f8fafc;
+                border-radius: 16px;
+                margin-bottom: 12px;
+                padding: 14px;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            }
+            td {
+                border: none;
+                padding: 6px 0;
+                text-align: right;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: transparent !important;
+            }
+            td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #64748b;
+                font-size: 12px;
+                flex: 0 0 80px;
+            }
+            td:last-child {
+                border-bottom: none;
+                justify-content: flex-start;
+                gap: 6px;
+                flex-wrap: wrap;
+                margin-top: 8px;
+                padding-top: 8px;
+                border-top: 1px dashed #e2e8f0;
+            }
+            td:last-child:before { display: none; }
+            .action-group .btn { padding: 6px 12px; font-size: 12px; min-width: 40px; }
+            .pagination a, .pagination span { padding: 6px 12px; font-size: 13px; }
+            .toolbar { flex-direction: column; align-items: stretch; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .balance-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .container { padding: 12px; }
+            td:before { flex: 0 0 60px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 <span>داشبورد</span> مدیریت</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- ===== فیلتر تاریخ ===== -->
+        <form method="GET" action="{{ url_for('dashboard') }}" class="filter-box">
+            <div class="field">
+                <label>📅 از تاریخ</label>
+                <input type="text" name="start_date" placeholder="۱۴۰۴/۰۱/۰۱" value="{{ start_date }}">
+            </div>
+            <div class="field">
+                <label>📅 تا تاریخ</label>
+                <input type="text" name="end_date" placeholder="۱۴۰۴/۱۲/۲۹" value="{{ end_date }}">
+            </div>
+            <button type="submit" class="btn-filter">اعمال فیلتر</button>
+            <a href="{{ url_for('dashboard') }}" class="btn-reset">حذف فیلتر</a>
+        </form>
+
+        <!-- ===== آمار ===== -->
+        <div class="stats">
+            <div class="stat-box">
+                <span>{{ total_balance|default(0)|to }}</span>
+                <div class="label">موجودی کل صندوق (تومان)</div>
+            </div>
+            <div class="stat-box">
+                <span>{{ total_donations|to }}</span>
+                <div class="label">تعداد واریزی‌های تأییدشده</div>
+            </div>
+            <div class="stat-box">
+                <span>{{ total_expenses|to }}</span>
+                <div class="label">تعداد خرج‌ها</div>
+            </div>
+            <div class="stat-box">
+                <span class="pending-color">{{ pending_count|to }}</span>
+                <div class="label">در انتظار تأیید</div>
+            </div>
+        </div>
+
+        <!-- ===== موجودی تفکیکی ===== -->
+        <h2>📂 موجودی به تفکیک دسته‌ها</h2>
+        <div class="balance-grid">
+            {% for cat, amt in balance_by_category.items() %}
+                <div class="balance-item">
+                    <span class="cat">{{ cat }}</span>
+                    <span class="amt">{{ amt|to }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- ===== ابزارها ===== -->
+        <div class="actions">
+            <a href="{{ url_for('add_donation') }}" class="btn btn-success">➕ ثبت واریزی جدید</a>
+            <a href="{{ url_for('add_expense') }}" class="btn btn-danger">➖ ثبت خرج جدید</a>
+            <a href="{{ url_for('admin_campaigns') }}" class="btn btn-purple">🎯 مدیریت کمپین‌ها</a>
+            <a href="{{ url_for('export_excel') }}" class="btn btn-primary">📥 خروجی اکسل</a>
+        </div>
+
+        <!-- ===== جدول تراکنش‌ها ===== -->
+        <div class="toolbar">
+            <h2 style="margin:0;">📋 آخرین تراکنش‌ها</h2>
+            <span class="count">تعداد کل: {{ total|to }}</span>
+        </div>
+
+        {% if transactions %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>نوع</th>
+                        <th>نام / توضیحات</th>
+                        <th>دسته</th>
+                        <th>مبلغ (تومان)</th>
+                        <th>وضعیت</th>
+                        <th>تاریخ</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in transactions %}
+                    <tr>
+                        <td data-label="ردیف">{{ (loop.index + (current_page - 1) * 15)|to }}</td>
+                        <td data-label="نوع">
+                            {% if t.type == 'واریز' %}
+                                <span class="badge badge-donation">واریز</span>
+                            {% else %}
+                                <span class="badge badge-expense">خرج</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="نام / توضیحات">{{ t.name if t.type == 'واریز' else t.description }}</td>
+                        <td data-label="دسته">{{ t.category }}</td>
+                        <td data-label="مبلغ" class="{% if t.type == 'واریز' %}text-green{% else %}text-red{% endif %}">{{ t.amount|to }}</td>
+                        <td data-label="وضعیت">
+                            {% if t.obj_type == 'donation_item' %}
+                                {% if t.status == 'pending' %}
+                                    <span class="badge badge-pending">در انتظار</span>
+                                {% elif t.status == 'approved' %}
+                                    <span class="badge badge-approved">تأیید</span>
+                                {% else %}
+                                    <span class="badge badge-rejected">رد</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge badge-registered">ثبت</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="تاریخ">{{ t.created_at|shamsi if t.created_at else '-' }}</td>
+                        <td data-label="عملیات">
+                            <div class="action-group">
+                                {% if t.obj_type == 'donation_item' %}
+                                    {% if t.status == 'pending' %}
+                                        <a href="{{ url_for('approve_reject_donation', donation_id=t.real_id, action='approve') }}" class="btn btn-success btn-sm">✔</a>
+                                        <a href="{{ url_for('approve_reject_donation', donation_id=t.real_id, action='reject') }}" class="btn btn-danger btn-sm">✖</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('edit_donation', donation_id=t.real_id) }}" class="btn btn-warning btn-sm">✏️</a>
+                                    <a href="{{ url_for('delete_donation', donation_id=t.real_id) }}" class="btn btn-danger btn-sm" onclick="return confirm('حذف شود؟')">🗑️</a>
+                                {% else %}
+                                    <a href="{{ url_for('edit_expense', expense_id=t.real_id) }}" class="btn btn-warning btn-sm">✏️</a>
+                                    <a href="{{ url_for('delete_expense', expense_id=t.real_id) }}" class="btn btn-danger btn-sm" onclick="return confirm('حذف شود؟')">🗑️</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== صفحه‌بندی ===== -->
+        <div class="pagination">
+            {% if current_page > 1 %}
+                <a href="{{ url_for('dashboard', page=current_page-1, start_date=start_date, end_date=end_date) }}">قبلی</a>
+            {% endif %}
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == current_page %}
+                    <span class="active">{{ p|to }}</span>
+                {% else %}
+                    <a href="{{ url_for('dashboard', page=p, start_date=start_date, end_date=end_date) }}">{{ p|to }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if current_page < total_pages %}
+                <a href="{{ url_for('dashboard', page=current_page+1, start_date=start_date, end_date=end_date) }}">بعدی</a>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="empty">هیچ تراکنشی ثبت نشده است.</div>
+        {% endif %}
+    </div>
+</body>
+</html>

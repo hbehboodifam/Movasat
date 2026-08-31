@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مدیریت کمپین‌ها</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazirmatn', Tahoma, sans-serif;
+            background: #f1f5f9;
+            padding: 16px;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        h1 {
+            font-weight: 800;
+            font-size: 24px;
+            color: #1a2940;
+            margin-bottom: 6px;
+        }
+        h1 span {
+            color: #d4af37;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 16px 0 20px 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+        .btn-success { background: #0d9488; }
+        .btn-success:hover { background: #0f766e; }
+        .btn-warning { background: #f59e0b; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-primary { background: #1a2940; }
+        .btn-primary:hover { background: #0f1a2b; }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .alert-success {
+            background: #ecfdf5;
+            color: #0d9488;
+            border-right: 4px solid #0d9488;
+        }
+        .alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-right: 4px solid #dc2626;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 12px 0;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 600px;
+        }
+        th {
+            background: #1a2940;
+            color: white;
+            padding: 14px 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+            vertical-align: middle;
+        }
+        tr:hover td {
+            background: #f8fafc;
+        }
+        .badge-active {
+            background: #0d9488;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-inactive {
+            background: #94a3b8;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+        .action-group {
+            display: inline-flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        /* ریسپانسیو موبایل */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 16px; border-radius: 16px; }
+            h1 { font-size: 20px; }
+            .toolbar .btn { flex: 1 1 100%; justify-content: center; }
+            .table-wrapper {
+                border: none;
+                border-radius: 0;
+                overflow-x: visible;
+            }
+            table {
+                min-width: unset;
+                display: block;
+            }
+            thead { display: none; }
+            tbody, tr, td { display: block; width: 100%; }
+            tr {
+                background: #f8fafc;
+                border-radius: 16px;
+                margin-bottom: 12px;
+                padding: 14px;
+                border: 1px solid #e2e8f0;
+            }
+            td {
+                border: none;
+                padding: 6px 0;
+                text-align: right;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: transparent !important;
+            }
+            td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #64748b;
+                font-size: 12px;
+                flex: 0 0 80px;
+            }
+            td:last-child {
+                border-bottom: none;
+                justify-content: flex-start;
+                gap: 6px;
+                flex-wrap: wrap;
+                padding-top: 8px;
+                border-top: 1px dashed #e2e8f0;
+                margin-top: 8px;
+            }
+            td:last-child:before { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 <span>مدیریت</span> کمپین‌ها</h1>
+
+        <div class="toolbar">
+            <a href="{{ url_for('add_campaign') }}" class="btn btn-success">➕ افزودن کمپین جدید</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">← بازگشت به داشبورد</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>عنوان</th>
+                        <th>توضیحات</th>
+                        <th>مبلغ هدف</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for camp in campaigns %}
+                    <tr>
+                        <td data-label="ردیف">{{ loop.index|to }}</td>
+                        <td data-label="عنوان">{{ camp.title }}</td>
+                        <td data-label="توضیحات">{{ camp.description|truncate(30) if camp.description else '-' }}</td>
+                        <td data-label="مبلغ هدف">{{ camp.target_amount|to if camp.target_amount else '-' }}</td>
+                        <td data-label="وضعیت">
+                            {% if camp.is_active %}
+                                <span class="badge-active">فعال</span>
+                            {% else %}
+                                <span class="badge-inactive">غیرفعال</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="عملیات">
+                            <div class="action-group">
+                                <a href="{{ url_for('edit_campaign', campaign_id=camp.id) }}" class="btn btn-warning btn-sm">✏️</a>
+                                <a href="{{ url_for('delete_campaign', campaign_id=camp.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('آیا از حذف این کمپین مطمئن هستید؟')">🗑️</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if not campaigns %}
+        <div class="empty">هیچ کمپینی تعریف نشده است.</div>
+        {% endif %}
+    </div>
+</body>
+</html>
